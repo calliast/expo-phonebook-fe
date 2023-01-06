@@ -9,7 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import Task from "../components/Task";
+import Task from "./Task copy";
 
 export default function Contact() {
   const [task, setTask] = useState();
