@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
-  TouchableOpacity,
   SafeAreaView,
 } from "react-native";
 import { Button, Icon } from "react-native-elements";
@@ -22,9 +21,7 @@ export default function PhoneBookItem(props) {
     phone: props.phone,
   });
 
-  const [edit, setEdit] = useState({
-    isEdit: false,
-  });
+  const [edit, setEdit] = useState(false);
 
   const handleInputChange = (name, value) => {
     setContact({
@@ -40,15 +37,13 @@ export default function PhoneBookItem(props) {
       phone: contact.phone,
     };
     dispatch(updateContact(data));
-    setEdit({
-      isEdit: false,
-    });
+    setEdit(false);
   }, [dispatch, contact]);
 
-  const handleEdit = () => setEdit({ isEdit: true });
+  const handleEdit = () => setEdit(true);
 
   const handleCancel = () => {
-    setEdit({ isEdit: false });
+    setEdit(false);
     setContact({
       id: props.itemId,
       name: props.name,
@@ -66,97 +61,102 @@ export default function PhoneBookItem(props) {
   };
 
   return (
-    <SafeAreaView style={styles.tr}>
-      <Text style={styles.TableColumnNo}>#{props.no}</Text>
-      {edit.isEdit ? (
-        <View style={styles.contactRow}>
+    <SafeAreaView style={[styles.contactItem, {backgroundColor: props.sent ? "#E2E7E4": "#FD843D", height: edit ? 100: 71}]}>
+      <View style={styles.personIcon}>
+        <Icon name="person" size={32} color="#000" />
+        </View>
+      {edit ? (
+        <View style={styles.editLayout}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.editFormWrapper}
+            style={styles.editInputLayout}
           >
             <TextInput
               style={styles.editInput}
-              onChangeText={(text)=> handleInputChange('name', text)}
+              onChangeText={(text) => handleInputChange("name", text)}
               value={contact.name}
               placeholder="Insert new name"
             />
             <TextInput
               style={styles.editInput}
-              onChangeText={(text)=> handleInputChange('phone', text)}
+              onChangeText={(text) => handleInputChange("phone", text)}
               value={contact.phone}
               placeholder="Insert new number"
               keyboardType="numeric"
             />
           </KeyboardAvoidingView>
           {/* Save and Cancel button */}
-          <View style={styles.TableColumnButton}>
-            <Button
-              icon={{
-                name: "save",
-                type: "font-awesome",
-                size: 15,
-                color: "white",
-              }}
-              title=""
-              onPress={handleUpdateContact}
-              buttonStyle={{ backgroundColor: "#5cb85c" }}
-            />
-            <Button
-              icon={{
-                name: "ban",
-                type: "font-awesome",
-                size: 15,
-                color: "white",
-              }}
-              title=""
-              onPress={handleCancel}
-              buttonStyle={{ backgroundColor: "#d9534f" }}
-            />
+          <View style={styles.actionButton}>
+              <Button
+                icon={{
+                  name: "save",
+                  type: "font-awesome",
+                  size: 17,
+                  color: "white",
+                }}
+                title=""
+                onPress={handleUpdateContact}
+                buttonStyle={[styles.Button, { backgroundColor: "#33CB42" }]}
+              />
+              <Button
+                icon={{
+                  name: "ban",
+                  type: "font-awesome",
+                  size: 17,
+                  color: "white",
+                }}
+                title=""
+                onPress={handleCancel}
+                buttonStyle={[styles.Button, { backgroundColor: "#949191" }]}
+              />
           </View>
         </View>
       ) : (
-        <View style={styles.contactRow}>
-          <Text style={styles.TableColumnText}>{props.name}</Text>
-          <Text style={styles.TableColumnText}>{props.phone}</Text>
-          <View style={styles.TableColumnButton}>
+        <View style={styles.listLayout}>
+          <View style={styles.contactDetails}>
+            <Text style={styles.contactDetailsName}>{props.name}</Text>
+            <View style={styles.lineBar}></View>
+            <Text style={styles.contactDetailsPhone}>{props.phone}</Text>
+          </View>
+          <View style={styles.actionButton}>
             {props.sent ? (
               <>
                 <Button
                   icon={{
                     name: "edit",
                     type: "font-awesome",
-                    size: 15,
+                    size: 17,
                     color: "white",
                   }}
                   title=""
                   onPress={handleEdit}
-                  buttonStyle={{ backgroundColor: "#00aced" }}
+                  buttonStyle={[styles.Button, { backgroundColor: "#449AFF" }]}
                 />
 
                 <Button
                   icon={{
                     name: "trash",
                     type: "font-awesome",
-                    size: 15,
+                    size: 17,
                     color: "white",
                   }}
                   title=""
                   onPress={props.delete}
-                  buttonStyle={{ backgroundColor: "#dd6461" }}
+                  buttonStyle={[styles.Button, { backgroundColor: "#F94D4D" }]}
                 />
               </>
             ) : (
               <Button
-                  icon={{
-                    name: "undo",
-                    type: "font-awesome",
-                    size: 15,
-                    color: "white",
-                  }}
-                  title=""
-                  onPress={handleResendContact}
-                  buttonStyle={{ backgroundColor: "#f7960a" }}
-                />
+                icon={{
+                  name: "undo",
+                  type: "font-awesome",
+                  size: 16,
+                  color: "black",
+                }}
+                title=""
+                onPress={handleResendContact}
+                buttonStyle={[styles.Button, { backgroundColor: "#FFF" }]}
+              />
             )}
           </View>
         </View>
@@ -166,77 +166,79 @@ export default function PhoneBookItem(props) {
 }
 
 const styles = StyleSheet.create({
-  tr: {
+  contactItem: {
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "green",
+    justifyContent: "space-evenly",
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    borderRadius: 14,
   },
-  contactRow: {
+  personIcon: {
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 40,
+  },
+  editLayout: {
     flexDirection: "row",
-    width: "100%",
-    alignItems: "center",
-  },
-  TableColumn: {
-    width: "30%",
-    paddingVertical: 15,
-    alignItems: "center",
+    width: "70%",
     justifyContent: "space-between",
-    textAlign: "center",
+    marginHorizontal: 8,
   },
-  TableColumnNo: {
-    width: 35,
-    textAlign: "center",
-  },
-  TableColumnButton: {
-    width: "30%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    textAlign: "center",
-  },
-  TableColumnText: {
-    width: "30%",
-    paddingVertical: 15,
-    alignItems: "center",
+  editInputLayout: {
+    width: "65%",
+    height: 84,
+    flexDirection: "column",
     justifyContent: "space-between",
-    textAlign: "center",
-    fontSize: 14,
-  },
-  editFormWrapper: {
-    width: "60%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "orange",
   },
   editInput: {
-    width: "48%",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    backgroundColor: "#FFF",
-    borderRadius: 5,
-    fontSize: 14,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "black",
-  },
-  textButton: {
+    width: 140,
+    height: 39,
+    padding: 10,
     fontSize: 16,
+    backgroundColor: "#FFF",
+    borderRadius: 10,
   },
-  textWrapper: {
-    backgroundColor: "cyan",
-    padding: 4,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "black",
+  listLayout: {
+    flexDirection: "row",
+    width: "70%",
+    justifyContent: "space-between",
+    marginHorizontal: 8,
+    // borderStyle: "solid",
+    // borderWidth: 1,
+    // borderColor: "purple",
   },
-  button: {
-    margin: 5,
+  contactDetails: {
+    width: "60%",
+    flexDirection: "column",
+  },
+  lineBar: {
+    width: 140,
+    height: 1,
+    backgroundColor: "black",
+    marginBottom: 4,
+  },
+  contactDetailsName: {
+    fontSize: 20,
+    marginBottom: 4,
+  },
+  contactDetailsPhone: {
+    fontSize: 14,
+  },
+  actionButton: {
+    width: "30%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  Button: {
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    margin: 2,
   },
 });

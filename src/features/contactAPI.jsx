@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const request = axios.create({
-  baseURL: "http://localhost:3039/",
+  baseURL: "http://192.168.8.108:3039/",
   timout: 1000,
   headers: { 
     Authorization: "token", 

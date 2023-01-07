@@ -42,6 +42,7 @@ export const addContact = createAsyncThunk("contact/addContact", async (arg, { d
   };
   try {
     //. add new contact to the front end
+    console.log(state.params, 'ini di add');
     if (!state.params.name && !state.params.phone) {
       await dispatch(addtoFE(newContact));
     }
@@ -229,7 +230,9 @@ export const loadMore = () => async (dispatch, getState) => {
     }
 }
 
-export const searchContact = (query) => async (dispatch) => {
+export const searchContact = (query) => async (dispatch, getState) => {
+  const state = getState().contact
+  console.log(state.params);
   await dispatch(resetquery());
   dispatch(loadContact({ query }));
 };

@@ -1,15 +1,14 @@
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addContact } from "../../src original source/features/contactSlice";
+import { addContact } from "../features/contactSlice";
 import {
   StyleSheet,
-  Text,
   View,
   KeyboardAvoidingView,
   Platform,
   TextInput,
-  TouchableOpacity,
   SafeAreaView,
+  Keyboard,
 } from "react-native";
 import { Button, Icon } from "react-native-elements";
 
@@ -28,96 +27,79 @@ export default function UserForm(props) {
     });
   };
 
-  const handleOnSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-      dispatch(addContact({ name: contact.name, phone: contact.phone }));
-      setContact({
-        name: "",
-        phone: "",
-      });
-    },
-    [dispatch, contact]
-  );
+  const handleOnSubmit = useCallback(() => {
+    dispatch(addContact({ name: contact.name, phone: contact.phone }));
+    setContact({
+      name: "",
+      phone: "",
+    });
+    Keyboard.dismiss();
+  }, [dispatch, contact]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.addFormWrapper}
+        style={styles.addForm}
       >
-        <View style={styles.formSearch}>
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Name</Text>
+        <View style={styles.addBox}>
+          <View style={styles.addInput}>
             <TextInput
               name="name"
               style={styles.input}
-              onChangeText={(text)=> handleInputChange('name', text)}
+              onChangeText={(text) => handleInputChange("name", text)}
               value={contact.name}
               placeholder="Insert new name"
+              placeholderTextColor="#797979"
             />
           </View>
 
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Phone</Text>
+          <View style={styles.addInput}>
             <TextInput
               name="phone"
               style={styles.input}
-              onChangeText={(text)=> handleInputChange('phone', text)}
+              onChangeText={(text) => handleInputChange("phone", text)}
               value={contact.phone}
               placeholder="Insert new number"
+              placeholderTextColor="#797979"
               keyboardType="numeric"
             />
           </View>
         </View>
 
         <Button
+          title="Add new contact"
           onPress={handleOnSubmit}
-          icon={<Icon name="save" size={15} color="#fff" />}
-          title="Save"
-          color="#00aced"
-          style={{
-            marginLeft: 5,
-            flexDirection: "row",
-            justifyContent: "flex-end",
-          }}
+          buttonStyle={[styles.Button, { backgroundColor: "#26BAF9" }]}
+          titleStyle={{ fontWeight: "bold" }}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  addFormWrapper: {
+  addForm: {
+    height: 140,
     flexDirection: "column",
-    justifyContent: "flex-end",
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "purple",
-  },
-  formSearch: {
-    width: "100%",
-    height: 70,
-    flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    // highlighter
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "blue",
   },
-  singleInput: {
-    width: "48%",
+  addBox: {
+    width: "100%",
+    height: 90,
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  addInput: {
+    width: "100%",
   },
   input: {
     width: "100%",
+    height: 39,
     paddingVertical: 8,
     paddingHorizontal: 20,
-    backgroundColor: "#FFF",
+    backgroundColor: "#EBEBEB",
     borderRadius: 5,
     fontSize: 14,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "black",
   },
   textButton: {
     fontSize: 14,
@@ -125,8 +107,5 @@ const styles = StyleSheet.create({
   textWrapper: {
     backgroundColor: "cyan",
     padding: 4,
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "black",
   },
 });

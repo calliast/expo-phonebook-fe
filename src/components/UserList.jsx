@@ -19,12 +19,6 @@ export default function UserList(props) {
 
   return (
     <SafeAreaView style={styles.TableList}>
-      <View style={styles.TableHead}>
-        <Text style={styles.TableColumnNo}>#</Text>
-        <Text style={styles.TableColumnText}>Name</Text>
-        <Text style={styles.TableColumnText}>Phone</Text>
-        <Text style={styles.TableColumnText}>Action</Text>
-      </View>
       <FlatList
         data={contacts}
         renderItem={({ item, index }) => (
@@ -40,7 +34,7 @@ export default function UserList(props) {
         )}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.ItemList}
-        style={{ maxHeight: 300 }}
+        style={{ maxHeight: 450 }}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
       />
@@ -59,33 +53,15 @@ export default function UserList(props) {
 
 const styles = StyleSheet.create({
   TableList: {
-    height: 270,
+    height: 430,
     backgroundColor: "#FFF",
     flexDirection: "column",
     alignItems: "center",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 5,
-  },
-  TableHead: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "100%",
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-  },
-  TableColumnText: {
-    width: "30%",
-    justifyContent: "space-between",
-    textAlign: "center",
-    fontSize: 16,
-  },
-  TableColumnNo: {
-    width: 35,
-    textAlign: "center",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   ItemList: {
-    marginTop: 10,
+    marginVertical: 5,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",

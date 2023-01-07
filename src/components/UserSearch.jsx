@@ -9,8 +9,8 @@ import {
   Platform,
   TextInput,
   TouchableOpacity,
-  Pressable,
   SafeAreaView,
+  Keyboard
 } from "react-native";
 import { Button, Icon } from "react-native-elements";
 
@@ -21,9 +21,7 @@ export default function UserSearch(props) {
     phone: "",
   });
 
-  const [search, setSearch] = useState({
-    isSearch: false,
-  });
+  const [search, setSearch] = useState(false);
 
   const [mode, setMode] = useState("and");
 
@@ -40,10 +38,9 @@ export default function UserSearch(props) {
       phone: "",
     });
     setMode("and");
-    setSearch({
-      isSearch: false,
-    });
+    setSearch(false);
     dispatch(resetQuery());
+    Keyboard.dismiss();
   };
 
   const handleOnSearchSubmit = useCallback(() => {
@@ -57,109 +54,101 @@ export default function UserSearch(props) {
         mode: mode,
       })
     );
-    setSearch({
-      isSearch: true,
-    });
+    setSearch(true);
+    Keyboard.dismiss();
   }, [dispatch, query, mode]);
 
   return (
     <SafeAreaView>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.addFormWrapper}
+        style={styles.searchBox}
       >
-        <View style={styles.formSearch}>
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Name</Text>
-            <TextInput
-              name="name"
-              style={styles.input}
-              onChangeText={(text) => handleInputChange("name", text)}
-              value={query.name}
-              placeholder="name to search"
-            />
-          </View>
+        <View style={styles.searchInput}>
+          <TextInput
+            name="name"
+            style={styles.textInput}
+            onChangeText={(text) => handleInputChange("name", text)}
+            value={query.name}
+            placeholder="Insert name"
+            placeholderTextColor="#797979"
+          />
 
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Phone</Text>
-            <TextInput
-              name="phone"
-              style={styles.input}
-              onChangeText={(text) => handleInputChange("phone", text)}
-              value={query.phone}
-              placeholder="number to search"
-              keyboardType="numeric"
-            />
+          <TextInput
+            name="phone"
+            style={styles.textInput}
+            onChangeText={(text) => handleInputChange("phone", text)}
+            value={query.phone}
+            placeholder="Insert number"
+            placeholderTextColor="#797979"
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={styles.searchMode}>
+          <Text style={radioStyles.RadioText}>search-mode:</Text>
+          <View style={radioStyles.Radio}>
+            <TouchableOpacity
+              style={[
+                radioStyles.RadioButton,
+                mode === "and" && radioStyles.RadioButtonActive,
+              ]}
+              onPress={() => setMode("and")}
+            >
+              {mode === "and" ? (
+                <View style={radioStyles.RadioButtonChecked} />
+              ) : (
+                <View style={radioStyles.RadioButtonUnchecked} />
+              )}
+            </TouchableOpacity>
+            <Text
+              style={[
+                radioStyles.RadioText,
+                mode === "and" && radioStyles.RadioTextActive,
+              ]}
+            >
+              Strict
+            </Text>
+          </View>
+          <View style={radioStyles.Radio}>
+            <TouchableOpacity
+              style={[
+                radioStyles.RadioButton,
+                mode === "or" && radioStyles.RadioButtonActive,
+              ]}
+              onPress={() => setMode("or")}
+            >
+              {mode === "or" ? (
+                <View style={radioStyles.RadioButtonChecked} />
+              ) : (
+                <View style={radioStyles.RadioButtonUnchecked} />
+              )}
+            </TouchableOpacity>
+            <Text
+              style={[
+                radioStyles.RadioText,
+                mode === "or" && radioStyles.RadioTextActive,
+              ]}
+            >
+              Any
+            </Text>
           </View>
         </View>
-        <View style={styles.inputGrouped}>
-          <View style={styles.searchMode}>
-            <Text style={styles.RadioText}>search-mode:</Text>
-            <View style={styles.Radio}>
-              <TouchableOpacity
-                style={[
-                  styles.RadioButton,
-                  mode === "and" && styles.RadioButtonActive,
-                ]}
-                onPress={() => setMode("and")}
-              >
-                {mode === "and" ? (
-                  <View style={styles.RadioButtonChecked} />
-                ) : (
-                  <View style={styles.RadioButtonUnchecked} />
-                )}
-              </TouchableOpacity>
-              <Text
-                style={[
-                  styles.RadioText,
-                  mode === "and" && styles.RadioTextActive,
-                ]}
-              >
-                Strict
-              </Text>
-            </View>
-            <View style={styles.Radio}>
-              <TouchableOpacity
-                style={[
-                  styles.RadioButton,
-                  mode === "or" && styles.RadioButtonActive,
-                ]}
-                onPress={() => setMode("or")}
-              >
-                {mode === "or" ? (
-                  <View style={styles.RadioButtonChecked} />
-                ) : (
-                  <View style={styles.RadioButtonUnchecked} />
-                )}
-              </TouchableOpacity>
-              <Text
-                style={[
-                  styles.RadioText,
-                  mode === "or" && styles.RadioTextActive,
-                ]}
-              >
-                Any
-              </Text>
-            </View>
-          </View>
-          <View style={styles.searchBar}>
-            {search.isSearch && (
-              <Button
-                onPress={handleOnReset}
-                icon={<Icon name="undo" size={15} color="#fff" />}
-                title="Reset"
-                color="#00aced"
-                style={{marginHorizontal: 5}}
-                />
-                )}
-            <Button
-              onPress={handleOnSearchSubmit}
-              icon={<Icon name="search" size={15} color="#fff" />}
-              title="Search"
-              color="#00aced"
-              style={{marginLeft: 5}}
-            />
-          </View>
+        <View style={styles.searchButton}>
+          <Button
+            title="Search"
+            onPress={handleOnSearchSubmit}
+            buttonStyle={[styles.Button, { backgroundColor: "#26BAF9" }]}
+            titleStyle={{ fontWeight: "bold" }}
+          />
+          <Button
+            title="Reset"
+            onPress={handleOnReset}
+            buttonStyle={[
+              styles.Button,
+              { backgroundColor: search ? "#F9A526" : "#949191" },
+            ]}
+            titleStyle={{ fontWeight: "bold" }}
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -167,59 +156,49 @@ export default function UserSearch(props) {
 }
 
 const styles = StyleSheet.create({
-  addFormWrapper: {
+  searchBox: {
     flexDirection: "column",
     justifyContent: "flex-end",
     marginVertical: 5,
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "orange",
+    height: 130,
   },
-  formSearch: {
+  searchInput: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 18,
   },
-  singleInput: {
+  textInput: {
     width: "48%",
-  },
-  textLabel: {},
-  input: {
-    width: "100%",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    backgroundColor: "#FFF",
-    borderRadius: 5,
+    backgroundColor: "#EBEBEB",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 10,
     fontSize: 14,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "black",
-  },
-  inputGrouped: {
-    alignItems: "flex-end",
-  },
-  searchBar: {
-    marginVertical: 5,
-    width: "55%",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-end",
-    // highlighter
-    // borderStyle: "solid",
-    // borderWidth: 1,
-    // borderColor: "purple",
+    color: "#797979",
   },
   searchMode: {
     width: "80%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    marginTop: 15,
-    marginVertical: 5,
+    marginBottom: 18,
   },
+  searchButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  Button: {
+    width: 160,
+  },
+});
+
+const radioStyles = StyleSheet.create({
+  // Radio Styles
   RadioText: {
     fontSize: 16,
+    fontWeight: "200",
   },
   Radio: {
     flexDirection: "row",
@@ -232,18 +211,18 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#666",
+    borderColor: "#DBDBDB",
     alignItems: "center",
     justifyContent: "center",
   },
   RadioButtonActive: {
-    borderColor: "#000",
+    borderColor: "#797979",
   },
   RadioButtonChecked: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#000",
+    backgroundColor: "#797979",
   },
   RadioButtonUnchecked: {
     width: 0,
@@ -251,15 +230,5 @@ const styles = StyleSheet.create({
   },
   RadioTextActive: {
     color: "#000",
-  },
-  textButton: {
-    fontSize: 14,
-  },
-  textWrapper: {
-    backgroundColor: "cyan",
-    padding: 4,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "black",
   },
 });

@@ -5,34 +5,40 @@ import { useState } from "react";
 import { View, StyleSheet, Text, SafeAreaView } from "react-native";
 
 export default function PhoneBookBox(props) {
-  const [tab, setTab] = useState("search-form");
+  const [tab, setTab] = useState("search");
 
-  const handleTabClick = (value) => {
-    setTab(value);
-  };
+  // const handleChangeTab = (value) => {
+  //   setTab(value)
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.FormWrapper}>
-        <Text style={styles.sectionTitle}>PhoneBook</Text>
-        <View style={styles.items}>
-          {/* Phonebook Search */}
-          <View style={styles.subSection}>
-          <Text style={styles.subSectionTitle}>Search</Text>
-            <UserSearch />
+      <View style={styles.mainFrame}>
+        <Text style={styles.mainTitle}>PhoneBook</Text>
+        <View style={styles.componentSpacing}>
+          <View style={styles.tabTitle}>
+            <Text style={[styles.tabTitleText, { textDecorationLine: tab === "search" ? "underline" : "none" }]} onPress={() => setTab('search')}
+            >
+              Search
+            </Text>
+            <Text style={[styles.tabTitleText, { textDecorationLine: tab === "add" ? "underline" : "none" }]} onPress={() => setTab('add')}>Add</Text>
           </View>
-          {/* Phonebook List */}
-          <View style={styles.subSection}>
-          <Text style={styles.subSectionTitle}>
-            Contact List
-          </Text>
-            <UserList />
-          </View>
-          {/* Phonebook Add */}
-          <View style={styles.subSection}>
-          <Text style={styles.subSectionTitle}>Add</Text>
-            <UserForm />
-          </View>
+        </View>
+        {/* Phonebook Search */}
+        <View style={[styles.componentSpacing, { display: tab === "search" ? "show": "none" }]}>
+          <UserSearch />
+        </View>
+        {/* Phonebook Add */}
+        <View style={[styles.componentSpacing, { display: tab === "add" ? "show": "none" }]}>
+          <UserForm />
+        </View>
+        {/* Phonebook Linebar */}
+        <View style={styles.componentSpacing}>
+          <View style={styles.lineBar}></View>
+        </View>
+        {/* Phonebook List */}
+        <View style={styles.componentSpacing}>
+          <UserList />
         </View>
       </View>
     </SafeAreaView>
@@ -42,30 +48,36 @@ export default function PhoneBookBox(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8EAED",
+    backgroundColor: "#FFF",
   },
-  FormWrapper: {
-    height: 750,
-    paddingTop: 20,
+  mainFrame: {
+    width: "100%",
+    height: 700,
+    marginTop: 25,
     paddingHorizontal: 20,
+    justifyContent: "flex-start",
   },
-  sectionTitle: {
-    fontSize: 24,
+  mainTitle: {
+    fontSize: 32,
     fontWeight: "bold",
+    marginBottom: 20,
   },
-  subSectionTitle: {
-    //   borderStyle: "solid",
-    //   borderWidth: 1,
-    //   borderColor: "green",
+  tabTitle: {
+    width: 125,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  tabTitleText: {
     fontSize: 18,
     fontWeight: "bold",
-    textDecorationLine: "underline",
-    marginVertical: 5,
   },
-  subSection: {
-    marginVertical: 5,
+  componentSpacing: {
+    marginBottom: 25,
   },
-  items: {
-    marginVertical: 20,
+  lineBar: {
+    width: 345,
+    height: 2,
+    color: "black",
+    backgroundColor: "black",
   },
 });
