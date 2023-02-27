@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 39,
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: "#EBEBEB",
     borderRadius: 5,

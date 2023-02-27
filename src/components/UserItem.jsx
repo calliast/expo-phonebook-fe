@@ -96,7 +96,7 @@ export default function PhoneBookItem(props) {
                 }}
                 title=""
                 onPress={handleUpdateContact}
-                buttonStyle={[styles.Button, { backgroundColor: "#33CB42" }]}
+                buttonStyle={[styles.Button, { backgroundColor: "#449AFF" }]}
               />
               <Button
                 icon={{
@@ -130,7 +130,7 @@ export default function PhoneBookItem(props) {
                   }}
                   title=""
                   onPress={handleEdit}
-                  buttonStyle={[styles.Button, { backgroundColor: "#449AFF" }]}
+                  buttonStyle={[styles.Button, { backgroundColor: "#0a8402" }]}
                 />
 
                 <Button
@@ -142,7 +142,7 @@ export default function PhoneBookItem(props) {
                   }}
                   title=""
                   onPress={props.delete}
-                  buttonStyle={[styles.Button, { backgroundColor: "#F94D4D" }]}
+                  buttonStyle={[styles.Button, { backgroundColor: "#E82d01" }]}
                 />
               </>
             ) : (

@@ -137,8 +137,8 @@ export const contactSlice = createSlice({
           state.params = {
             page: response.data.page,
             pages: response.data.pages,
-            name: response.query.name ? response.query.name : "",
-            phone: response.query.phone ? response.query.phone : "",
+            name: response.query.name ? response.query.name : state.params.name,
+            phone: response.query.phone ? response.query.phone : state.params.phone,
             mode: response.query.mode ? response.query.mode : "and",
           };
           state.contacts = [
@@ -224,9 +224,11 @@ const { addpage, resetquery, addtoFE } = contactSlice.actions;
 
 export const loadMore = () => async (dispatch, getState) => {
   const state = getState().contact;
-    if (state.params.page < state.params.pages) {
-      await dispatch(addpage());
-      dispatch(loadContact());
+  console.log("🚀 ~ mau load more", state.params.page + '/' + state.params.pages)
+  if (state.params.page < state.params.pages) {
+    await dispatch(addpage());
+    dispatch(loadContact());
+    console.log("🚀 ~ sesudah load more", state.params.page + '/' + state.params.pages)
     }
 }
 

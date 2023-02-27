@@ -148,6 +148,7 @@ export default function UserSearch(props) {
               { backgroundColor: search ? "#F9A526" : "#949191" },
             ]}
             titleStyle={{ fontWeight: "bold" }}
+            disabled={search ? false: true}
           />
         </View>
       </KeyboardAvoidingView>
@@ -171,10 +172,12 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: "48%",
+    borderStyle: "solid",
+    borderColor: "black",
     backgroundColor: "#EBEBEB",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     fontSize: 14,
     color: "#797979",
   },

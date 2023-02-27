@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
 import PhoneBookBox from "./src/features/contact";
 import { store } from "./src/app/store";
-import ModalBook from "./components/tesModal";
 
 export default function App() {
   return (
